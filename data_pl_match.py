@@ -172,7 +172,15 @@ full[['team_x', 'team_opp_next_x', 'team_y', 'team_opp_next_y', 'date_next']]
 #create set of columns to not run through model
 removed_columns = list(full.columns[full.dtypes == 'object']) + removed_columns
 
-selected_columns = full.columns[~full.columns.isin(removed_columns)]
+selected_columns = full.columns[~full.columns.isin(removed_columns)] 
+
+sfs.fit(full[selected_columns], full['target'])
+
+predictors = list(selected_columns[sfs.get_support()])
+predictions = backtest(full, rr, predictors)
+#define accuracy score to see improvement of 62.9%
+accuracy_score(predictions['actual'], predictions['prediction'])
+#Output: 0.629629629629629
 
 
 
